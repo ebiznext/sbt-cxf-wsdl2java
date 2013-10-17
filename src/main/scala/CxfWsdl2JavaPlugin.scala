@@ -55,7 +55,7 @@ object CxfWsdl2JavaPlugin extends Plugin {
           if(wsdl.file.lastModified() > output.lastModified()) {
             val id : String = wsdl.key
             val args : Seq[String] = Seq("-d", output.getAbsolutePath, "-verbose", "-autoNameResolution", "-exsh", "true", "-client") ++ wsdl.args :+ wsdl.file.getAbsolutePath
-            s.log.info("Removing output directory for " + id + " ...")
+            s.log.debug("Removing output directory for " + id + " ...")
             IO.delete(output)
             s.log.info("Compiling " + id)
             "java -cp \""+classpath+"\" -Dfile.encoding=UTF-8 org.apache.cxf.tools.wsdlto.WSDLToJava "+args.mkString(" ") ! s.log
