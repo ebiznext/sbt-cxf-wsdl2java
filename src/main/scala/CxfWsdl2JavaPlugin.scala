@@ -47,7 +47,7 @@ object CxfWsdl2JavaPlugin extends Plugin {
       // définition de la tâche wsdl2java
       wsdl2java := {
         val s: TaskStreams = streams.value
-        val classpath : String = update.value.select( configurationFilter(name = "*") ).map(_.getAbsolutePath).mkString(":")
+        val classpath : String = update.value.select( configurationFilter(name = Config.name) ).map(_.getAbsolutePath).mkString(":")
         val basedir : File = target.value / "cxf"
         IO.createDirectory(basedir)
         wsdls.value.par.foreach { wsdl =>
