@@ -57,7 +57,7 @@ object CxfWsdl2JavaPlugin extends Plugin {
           val output : File = wsdl.outputDirectory(basedir)
           if(wsdl.file.lastModified() > output.lastModified()) {
             val id : String = wsdl.key
-            val args : Seq[String] = Seq("-d", output.getAbsolutePath, "-verbose", "-autoNameResolution", "-exsh", "true", "-client") ++ wsdl.args :+ wsdl.file.getAbsolutePath
+            val args : Seq[String] = Seq("-d", output.getAbsolutePath, "-verbose", "-autoNameResolution", "-exsh", "true", "-fe", "jaxws21", "-client") ++ wsdl.args :+ wsdl.file.getAbsolutePath
             s.log.debug("Removing output directory for " + id + " ...")
             IO.delete(output)
             s.log.info("Compiling " + id)
