@@ -44,10 +44,13 @@ object CxfWsdl2JavaPlugin extends Plugin {
       sourceManaged in Config := sourceManaged.value / "cxf",
       // ajout de ce répertoire dans la liste des répertoires source à prendre en compte lors de la compilation
       managedSourceDirectories in Compile += {(sourceManaged in Config).value},
+      managedClasspath in wsdl2java <<= (classpathTypes in wsdl2java, update) map { (ct, report) =>
+          Classpaths.managedJars(Config, ct, report)
+      },
       // définition de la tâche wsdl2java
       wsdl2java := {
         val s: TaskStreams = streams.value
-        val classpath : String = update.value.select( configurationFilter(name = Config.name) ).map(_.getAbsolutePath).mkString(":")
+        val classpath : String = (((managedClasspath in wsdl2java).value).files).map(_.getAbsolutePath).mkString(":")
         val basedir : File = target.value / "cxf"
         IO.createDirectory(basedir)
         wsdls.value.par.foreach { wsdl =>
