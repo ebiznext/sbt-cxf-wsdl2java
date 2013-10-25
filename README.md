@@ -35,7 +35,7 @@ Project(..., settings = Project.defaultSettings ++ com.ebiznext.sbt.plugins.CxfW
 
 Plugin keys are located in `com.ebiznext.sbt.plugins.CxfWsdl2JavaPlugin.Keys`
 
-## Add Wsdls
+### Add Wsdls
 
 ```scala
 lazy val wsclientPackage := "com.ebiznext.sbt.sample"
@@ -46,3 +46,6 @@ cxf.wsdls := Seq(
 )
 ```
 
+## Commands
+
+```~wsdl2java``` To automatically generate source code when a wsdl is changed
