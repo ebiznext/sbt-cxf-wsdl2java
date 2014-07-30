@@ -49,5 +49,3 @@ cxf.wsdls := Seq(
 ## Commands
 
 ```~wsdl2java``` To automatically generate source code when a wsdl is changed
-
-TODO https://gist.github.com/meiwin/2779731
