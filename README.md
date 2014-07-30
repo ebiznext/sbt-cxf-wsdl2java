@@ -16,7 +16,7 @@ Add plugin to *project/plugins.sbt*:
 
 resolvers += "Sonatype Repository" at "https://oss.sonatype.org/content/groups/public"
 
-addSbtPlugin("com.ebiznext.sbt.plugins" % "sbt-cxf-wsdl2java" % "0.1.2")
+addSbtPlugin("com.ebiznext.sbt.plugins" % "sbt-cxf-wsdl2java" % "0.1.3")
 ```
 
 For *.sbt* build definitions, inject the plugin settings in *build.sbt*:
@@ -49,3 +49,5 @@ cxf.wsdls := Seq(
 ## Commands
 
 ```~wsdl2java``` To automatically generate source code when a wsdl is changed
+
+TODO https://gist.github.com/meiwin/2779731
