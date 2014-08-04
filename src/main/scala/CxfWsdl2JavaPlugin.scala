@@ -61,7 +61,9 @@ object CxfWsdl2JavaPlugin extends Plugin {
             s.log.debug("Removing output directory for " + id + " ...")
             IO.delete(output)
             s.log.info("Compiling " + id)
-            "java -cp \""+classpath+"\" -Dfile.encoding=UTF-8 org.apache.cxf.tools.wsdlto.WSDLToJava "+args.mkString(" ") ! s.log
+            val cmd = Seq("java", "-cp", classpath, "-Dfile.encoding=UTF-8", "org.apache.cxf.tools.wsdlto.WSDLToJava") ++ args
+            s.log.debug(cmd.toString())
+            cmd ! s.log
             s.log.info("Finished " + id)
           }
           else{
