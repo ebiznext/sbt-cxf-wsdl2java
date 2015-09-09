@@ -6,7 +6,7 @@ organization := "com.ebiznext.sbt.plugins"
 
 version := "0.1.5-SNAPSHOT"
 
-scalaVersion := "2.10.2"
+scalaVersion := "2.10.4"
 
 publishMavenStyle := true
 
