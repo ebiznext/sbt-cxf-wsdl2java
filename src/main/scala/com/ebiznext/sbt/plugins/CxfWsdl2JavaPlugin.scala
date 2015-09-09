@@ -18,7 +18,7 @@ object CxfWsdl2JavaPlugin extends Plugin {
     lazy val wsdl2java = taskKey[Seq[File]]("Generates java files from wsdls")
     lazy val wsdls = settingKey[Seq[cxf.Wsdl]]("wsdls to generate java files from")
 
-  }  
+  }
 
   private object CxfDefaults extends Keys {
     val settings = Seq(
@@ -40,7 +40,7 @@ object CxfWsdl2JavaPlugin extends Plugin {
     }
 
     val settings = Seq(ivyConfigurations += Config) ++ CxfDefaults.settings ++ Seq(
-      // initialisation de la clef correspondante au répertoire source dans lequel les fichiers générés seront copiés 
+      // initialisation de la clef correspondante au répertoire source dans lequel les fichiers générés seront copiés
       sourceManaged in Config := sourceManaged.value / "cxf",
       // ajout de ce répertoire dans la liste des répertoires source à prendre en compte lors de la compilation
       managedSourceDirectories in Compile += {(sourceManaged in Config).value},
