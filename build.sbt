@@ -4,7 +4,7 @@ name := "sbt-cxf-wsdl2java"
 
 organization := "com.ebiznext.sbt.plugins"
 
-version := "0.1.4"
+version := "0.1.5-SNAPSHOT"
 
 scalaVersion := "2.10.2"
 
