@@ -20,9 +20,9 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
 
     lazy val cxfVersion = settingKey[String]("cxf version")
     lazy val wsdl2java = taskKey[Seq[File]]("Generates java files from wsdls")
-    lazy val wsdls = settingKey[Seq[Wsdl]]("wsdls to generate java files from")
+    lazy val cxfWsdls = settingKey[Seq[CxfWsdl]]("wsdls to generate java files from")
 
-    case class Wsdl(file: File, args: Seq[String], key: String) {
+    case class CxfWsdl(file: File, args: Seq[String], key: String) {
       def outputDirectory(basedir: File) = new File(basedir, key).getAbsoluteFile
     }
 
@@ -31,13 +31,13 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
   import autoImport._
 
   val cxfDefaults: Seq[Def.Setting[_]] = Seq(
-    cxfVersion := "2.7.3",
+    cxfVersion := "3.1.2",
     libraryDependencies ++= Seq(
       "org.apache.cxf" % "cxf-tools-wsdlto-core" % cxfVersion.value % CxfConfig.name,
       "org.apache.cxf" % "cxf-tools-wsdlto-databinding-jaxb" % cxfVersion.value % CxfConfig.name,
       "org.apache.cxf" % "cxf-tools-wsdlto-frontend-jaxws" % cxfVersion.value % CxfConfig.name
     ),
-    wsdls := Nil
+    cxfWsdls := Nil
   )
 
   private lazy val cxfConfig = Seq(
@@ -60,7 +60,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
       val basedir: File = target.value / "cxf"
       println(s"basedir $basedir")
       IO.createDirectory(basedir)
-      wsdls.value.par.foreach { wsdl =>
+      cxfWsdls.value.par.foreach { wsdl =>
         val output: File = wsdl.outputDirectory(basedir)
         if (wsdl.file.lastModified() > output.lastModified()) {
           val id: String = wsdl.key
