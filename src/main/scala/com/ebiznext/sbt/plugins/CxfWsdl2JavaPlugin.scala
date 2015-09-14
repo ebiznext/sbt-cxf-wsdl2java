@@ -53,12 +53,8 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
     // définition de la tâche wsdl2java
     wsdl2java := {
       val s: TaskStreams = streams.value
-      println(s"managedClasspath ${managedClasspath.in(wsdl2java).value}")
-      println(s"sourceManaged: ${sourceManaged.value}")
       val classpath: String = (((managedClasspath in wsdl2java).value).files).map(_.getAbsolutePath).mkString(System.getProperty("path.separator"))
-      println(s"classpath: ${classpath}")
       val basedir: File = target.value / "cxf"
-      println(s"basedir $basedir")
       IO.createDirectory(basedir)
       cxfWsdls.value.par.foreach { wsdl =>
         val output: File = wsdl.outputDirectory(basedir)
