@@ -19,9 +19,3 @@ project/plugins/project/
 .project
 
 .settings/org.eclipse.core.resources.prefs
-
-# IntelliJ
-*.iml
-.idea/
-/out/
-.idea_modules/

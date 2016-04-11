@@ -22,7 +22,7 @@ addSbtPlugin("com.ebiznext.sbt.plugins" % "sbt-cxf-wsdl2java" % "0.1.4")
 For *.sbt* build definitions, inject the plugin settings in *build.sbt*:
 
 ```scala
-Seq(cxf.settings: _*)
+seq(cxf.settings :_*)
 ```
 
 For *.scala* build definitions, inject the plugin settings in *Build.scala*:
@@ -34,12 +34,6 @@ Project(..., settings = Project.defaultSettings ++ com.ebiznext.sbt.plugins.CxfW
 ## Configuration
 
 Plugin keys are located in `com.ebiznext.sbt.plugins.CxfWsdl2JavaPlugin.Keys`
-
-### Change CXF version
-
-```scala
-cxf.cxfVersion := "3.1.3"
-```
 
 ### Add Wsdls
 
