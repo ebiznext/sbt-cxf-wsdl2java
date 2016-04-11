@@ -22,7 +22,7 @@ object CxfWsdl2JavaPlugin extends Plugin {
 
   private object CxfDefaults extends Keys {
     val settings = Seq(
-      cxfVersion := "2.7.3",
+      cxfVersion := "3.1.3",
       libraryDependencies ++= Seq[ModuleID](
         "org.apache.cxf" % "cxf-tools-wsdlto-core" % cxfVersion.value % Config.name,
         "org.apache.cxf" % "cxf-tools-wsdlto-databinding-jaxb" % cxfVersion.value % Config.name,
