@@ -23,6 +23,8 @@ addSbtPlugin("com.ebiznext.sbt.plugins" % "sbt-cxf-wsdl2java" % "0.1.5")
 
 Plugin keys are prefixed with "cxf".
 
+To override the default arguments passed to wsdl2java, use the "wsdl2javaDefaultArgs" with another Seq[String] of arguments.
+
 ### Add Wsdls
 
 ```scala
