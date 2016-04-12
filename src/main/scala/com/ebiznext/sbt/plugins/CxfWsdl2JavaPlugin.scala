@@ -21,6 +21,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
     lazy val cxfVersion = settingKey[String]("cxf version")
     lazy val wsdl2java = taskKey[Seq[File]]("Generates java files from wsdls")
     lazy val cxfWsdls = settingKey[Seq[CxfWsdl]]("wsdls to generate java files from")
+    lazy val wsdl2javaDefaultArgs = settingKey[Seq[String]]("wsdl2java default arguments")
 
     case class CxfWsdl(file: File, args: Seq[String], key: String) {
       def outputDirectory(basedir: File) = new File(basedir, key).getAbsoluteFile
@@ -37,7 +38,8 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
       "org.apache.cxf" % "cxf-tools-wsdlto-databinding-jaxb" % cxfVersion.value % CxfConfig.name,
       "org.apache.cxf" % "cxf-tools-wsdlto-frontend-jaxws" % cxfVersion.value % CxfConfig.name
     ),
-    cxfWsdls := Nil
+    cxfWsdls := Nil,
+    wsdl2javaDefaultArgs := Seq("-verbose", "-autoNameResolution", "-exsh", "true", "-fe", "jaxws21", "-client")
   )
 
   private lazy val cxfConfig = Seq(
@@ -60,7 +62,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
         val output: File = wsdl.outputDirectory(basedir)
         if (wsdl.file.lastModified() > output.lastModified()) {
           val id: String = wsdl.key
-          val args: Seq[String] = Seq("-d", output.getAbsolutePath, "-verbose", "-autoNameResolution", "-exsh", "true", "-fe", "jaxws21", "-client") ++ wsdl.args :+ wsdl.file.getAbsolutePath
+          val args: Seq[String] = Seq("-d", output.getAbsolutePath) ++ wsdl2javaDefaultArgs.value ++ wsdl.args :+ wsdl.file.getAbsolutePath
           s.log.debug("Removing output directory for " + id + " ...")
           IO.delete(output)
           s.log.info("Compiling " + id)
