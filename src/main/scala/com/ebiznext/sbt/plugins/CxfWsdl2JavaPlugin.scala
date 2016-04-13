@@ -22,11 +22,11 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
     lazy val wsdl2java = taskKey[Seq[File]]("Generates java files from wsdls")
     lazy val cxfWsdls = settingKey[Seq[CxfWsdl]]("wsdls to generate java files from")
     lazy val wsdl2javaDefaultArgs = settingKey[Seq[String]]("wsdl2java default arguments")
+    lazy val cxfParallelExecution = settingKey[Boolean]("execute wsdl2java commands in parallel")
 
     case class CxfWsdl(file: File, args: Seq[String], key: String) {
       def outputDirectory(basedir: File) = new File(basedir, key).getAbsoluteFile
     }
-
   }
 
   import autoImport._
@@ -39,7 +39,8 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
       "org.apache.cxf" % "cxf-tools-wsdlto-frontend-jaxws" % cxfVersion.value % CxfConfig.name
     ),
     cxfWsdls := Nil,
-    wsdl2javaDefaultArgs := Seq("-verbose", "-autoNameResolution", "-exsh", "true", "-fe", "jaxws21", "-client")
+    wsdl2javaDefaultArgs := Seq("-verbose", "-autoNameResolution", "-exsh", "true", "-fe", "jaxws21", "-client"),
+    cxfParallelExecution := true
   )
 
   private lazy val cxfConfig = Seq(
@@ -55,26 +56,33 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
     // définition de la tâche wsdl2java
     wsdl2java := {
       val s: TaskStreams = streams.value
-      val classpath: String = (((managedClasspath in wsdl2java).value).files).map(_.getAbsolutePath).mkString(System.getProperty("path.separator"))
+      val classpath: String = (managedClasspath in wsdl2java).value.files.map(_.getAbsolutePath).mkString(System.getProperty("path.separator"))
       val basedir: File = target.value / "cxf"
       IO.createDirectory(basedir)
-      cxfWsdls.value.par.foreach { wsdl =>
-        val output: File = wsdl.outputDirectory(basedir)
-        if (wsdl.file.lastModified() > output.lastModified()) {
-          val id: String = wsdl.key
-          val args: Seq[String] = Seq("-d", output.getAbsolutePath) ++ wsdl2javaDefaultArgs.value ++ wsdl.args :+ wsdl.file.getAbsolutePath
-          s.log.debug("Removing output directory for " + id + " ...")
-          IO.delete(output)
-          s.log.info("Compiling " + id)
-          val cmd = Seq("java", "-cp", classpath, "-Dfile.encoding=UTF-8", "org.apache.cxf.tools.wsdlto.WSDLToJava") ++ args
-          s.log.debug(cmd.toString())
-          cmd ! s.log
-          s.log.info("Finished " + id)
-        }
-        else {
-          s.log.debug("Skipping " + wsdl.key)
-        }
-        IO.copyDirectory(output, (sourceManaged in CxfConfig).value, true)
+
+      def outputDir(wsdl: CxfWsdl): File = wsdl.outputDirectory(basedir)
+
+      val wsdlColl = if (cxfParallelExecution.value) cxfWsdls.value.par else cxfWsdls.value
+      val (updated, notModified) = wsdlColl.partition( wsdl =>
+        wsdl.file.lastModified() > outputDir(wsdl).lastModified()
+      )
+
+      notModified.foreach(wsdl =>
+        s.log.debug("Skipping " + wsdl.key)
+      )
+
+      updated.foreach { wsdl =>
+        val id: String = wsdl.key
+        val output = outputDir(wsdl)
+        val args: Seq[String] = Seq("-d", output.getAbsolutePath) ++ wsdl2javaDefaultArgs.value ++ wsdl.args :+ wsdl.file.getAbsolutePath
+        s.log.debug("Removing output directory for " + id + " ...")
+        IO.delete(output)
+        s.log.info("Compiling " + id)
+        val cmd = Seq("java", "-cp", classpath, "-Dfile.encoding=UTF-8", "org.apache.cxf.tools.wsdlto.WSDLToJava") ++ args
+        s.log.debug(cmd.toString())
+        cmd ! s.log
+        s.log.info("Finished " + id)
+        IO.copyDirectory(output, (sourceManaged in CxfConfig).value, overwrite = true)
       }
       ((sourceManaged in CxfConfig).value ** "*.java").get
     },

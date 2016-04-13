@@ -23,7 +23,9 @@ addSbtPlugin("com.ebiznext.sbt.plugins" % "sbt-cxf-wsdl2java" % "0.1.5")
 
 Plugin keys are prefixed with "cxf".
 
-To override the default arguments passed to wsdl2java, use the "wsdl2javaDefaultArgs" with another Seq[String] of arguments.
+* **wsdl2javaDefaultArgs**: override the default arguments passed to wsdl2java, supply another Seq[String] of arguments.
+* **cxfParallelExecution**: set to *false* to disable running wsdl2java commands in parallel. Useful if there are duplicate classes
+to be generated and the output directory for multiple services are the same
 
 ### Add Wsdls
 
