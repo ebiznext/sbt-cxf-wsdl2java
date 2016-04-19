@@ -16,7 +16,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
   override def trigger = allRequirements
 
   object autoImport {
-    lazy val CxfConfig = config("cxf").hide
+    lazy val cxfConfig = config("cxfConfig").hide
 
     lazy val cxfVersion = settingKey[String]("cxf version")
     lazy val wsdl2java = taskKey[Seq[File]]("Generates java files from wsdls")
