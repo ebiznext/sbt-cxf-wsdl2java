@@ -32,7 +32,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
   import autoImport._
 
   val cxfDefaults: Seq[Def.Setting[_]] = Seq(
-    cxfVersion := "3.1.6",
+    cxfVersion := "3.3.4",
     libraryDependencies ++= Seq(
       "org.apache.cxf" % "cxf-tools-wsdlto-core" % cxfVersion.value % CxfConfig.name,
       "org.apache.cxf" % "cxf-tools-wsdlto-databinding-jaxb" % cxfVersion.value % CxfConfig.name,
