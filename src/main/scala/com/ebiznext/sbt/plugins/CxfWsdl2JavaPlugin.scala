@@ -4,6 +4,7 @@ import java.io.File
 
 import sbt.Keys._
 import sbt._
+import scala.sys.process._
 
 /**
  * @author stephane.manciot@ebiznext.com
@@ -50,9 +51,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
     managedSourceDirectories in Compile += {
       (sourceManaged in CxfConfig).value
     },
-    managedClasspath in wsdl2java <<= (classpathTypes in wsdl2java, update).map { (ct, report) =>
-      Classpaths.managedJars(CxfConfig, ct, report)
-    },
+    managedClasspath in wsdl2java := Classpaths.managedJars(CxfConfig, (classpathTypes in wsdl2java).value, update.value),
     // définition de la tâche wsdl2java
     wsdl2java := {
       val s: TaskStreams = streams.value
@@ -86,7 +85,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
       }
       ((sourceManaged in CxfConfig).value ** "*.java").get
     },
-    sourceGenerators in Compile <+= wsdl2java
+    sourceGenerators in Compile += wsdl2java
   )
 
   override lazy val projectSettings =

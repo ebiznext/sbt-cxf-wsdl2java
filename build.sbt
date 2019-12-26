@@ -4,9 +4,9 @@ name := "sbt-cxf-wsdl2java"
 
 organization := "com.ebiznext.sbt.plugins"
 
-version := "0.1.5-SNAPSHOT"
+version := "0.1.6"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.12.6"
 
 publishMavenStyle := true
 
