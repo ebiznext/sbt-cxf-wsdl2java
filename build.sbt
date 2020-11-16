@@ -6,7 +6,9 @@ organization := "com.ebiznext.sbt.plugins"
 
 version := "0.1.5-SNAPSHOT"
 
-scalaVersion := "2.10.4"
+lazy val scala211  = "2.11.12"
+
+crossScalaVersions := List(scala211)
 
 publishMavenStyle := true
 

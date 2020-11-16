@@ -27,6 +27,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
     case class CxfWsdl(file: File, args: Seq[String], key: String) {
       def outputDirectory(basedir: File) = new File(basedir, key).getAbsoluteFile
     }
+
   }
 
   import autoImport._
@@ -63,7 +64,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
       def outputDir(wsdl: CxfWsdl): File = wsdl.outputDirectory(basedir)
 
       val wsdlColl = if (cxfParallelExecution.value) cxfWsdls.value.par else cxfWsdls.value
-      val (updated, notModified) = wsdlColl.partition( wsdl =>
+      val (updated, notModified) = wsdlColl.partition(wsdl =>
         wsdl.file.lastModified() > outputDir(wsdl).lastModified()
       )
 
@@ -86,7 +87,7 @@ object CxfWsdl2JavaPlugin extends AutoPlugin {
       }
       ((sourceManaged in CxfConfig).value ** "*.java").get
     },
-    sourceGenerators in Compile <+= wsdl2java
+    (sourceGenerators in Compile) <+= wsdl2java
   )
 
   override lazy val projectSettings =
