@@ -4,7 +4,7 @@ name := "sbt-cxf-wsdl2java"
 
 organization := "com.ebiznext.sbt.plugins"
 
-version := "0.1.6"
+version := "0.1.5"
 
 lazy val scala211  = "2.11.12"
 
